@@ -1,6 +1,5 @@
-package com.model.cybersecurityreportsystem;
+package com.crs.services;
 
-import com.model.cybersecurityreportsystem.IncidentReport;
 import javafx.scene.control.Alert;
 
     /**
@@ -9,7 +8,6 @@ import javafx.scene.control.Alert;
      */
     public class CoreIncidentProcessor extends IncidentLogProcessor {
 
-        @Override
         public void processIncident(IncidentReport report) {
             // Polymorphic rule validation checking
             if (report.getSeverityLevel() >= 4) {

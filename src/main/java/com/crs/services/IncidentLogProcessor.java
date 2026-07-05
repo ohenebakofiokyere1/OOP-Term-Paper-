@@ -1,6 +1,5 @@
-package com.model.cybersecurityreportsystem;
+package com.crs.services;
 
-import com.model.cybersecurityreportsystem.IncidentReport;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

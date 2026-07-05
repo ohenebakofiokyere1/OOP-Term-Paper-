@@ -1,4 +1,4 @@
-package com.model.cybersecurityreportsystem;
+package com.crs.services;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
