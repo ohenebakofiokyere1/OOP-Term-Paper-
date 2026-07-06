@@ -196,8 +196,7 @@ public class Mainapp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                Mainapp.class.getResource("hello-view.fxml"));
+
         stage.setTitle("MSc IT | Cybersecurity Incident Reporting System");
 
         // Main structural layout container

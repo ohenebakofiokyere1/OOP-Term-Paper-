@@ -76,7 +76,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.example.cybersecurityreportsystem/com.example.cybersecurityreportsystem.HelloApplication
+                                com.example.cybersecurityreportsystem/com.example.cybersecurityreportsystem
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
