@@ -16,6 +16,7 @@ import javafx.scene.control.Alert;
                 triggerEmergencyAlert(report);
             }
             masterIncidentList.add(report);
+
         }
 
         private void triggerEmergencyAlert(IncidentReport report) {

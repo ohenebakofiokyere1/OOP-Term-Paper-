@@ -7,6 +7,6 @@ module com.example.cybersecurityreportsystem {
 
     opens com.example.cybersecurityreportsystem to javafx.fxml;
     opens com.crs.controller to javafx.fxml;
-    exports com.example.cybersecurityreportsystem;
+    opens com.crs.services to javafx.base;
     exports com.crs.main to javafx.graphics;
 }

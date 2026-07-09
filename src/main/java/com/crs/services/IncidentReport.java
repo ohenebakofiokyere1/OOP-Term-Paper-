@@ -15,9 +15,38 @@ import java.time.format.DateTimeFormatter;
         private String description;
         private String timestamp;
         private String status;
+        private String reportedBy;
+
+        public void setIncidentId(String incidentId) {
+            this.incidentId = incidentId;
+        }
+
+        public void setThreatType(String threatType) {
+            this.threatType = threatType;
+        }
+
+        public void setAffectedSystem(String affectedSystem) {
+            this.affectedSystem = affectedSystem;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public void setTimestamp(String timestamp) {
+            this.timestamp = timestamp;
+        }
+
+        public String getReportedBy() {
+            return reportedBy;
+        }
+
+        public void setReportedBy(String reportedBy) {
+            this.reportedBy = reportedBy;
+        }
 
         public IncidentReport(String incidentId, String threatType, int severityLevel,
-                              String affectedSystem, String description) {
+                              String affectedSystem, String description, String reportedBy) {
             this.incidentId = incidentId;
             this.threatType = threatType;
             setSeverityLevel(severityLevel); // Enforces structural business validation rule
@@ -25,6 +54,7 @@ import java.time.format.DateTimeFormatter;
             this.description = description;
             this.timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             this.status = "OPEN";
+            this.reportedBy=reportedBy;
         }
 
         // Getters and Setters demonstrating Encapsulation

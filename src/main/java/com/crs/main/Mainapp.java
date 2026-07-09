@@ -1,10 +1,13 @@
 package com.crs.main;
 
+import com.crs.services.AppData;
 import com.crs.services.CoreIncidentProcessor;
 import com.crs.services.IncidentLogProcessor;
 import com.crs.services.IncidentReport;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -14,13 +17,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.util.UUID;
+
 
 public class Mainapp extends Application {
     // Business Logic Engine instances (Polymorphic binding)
     private final IncidentLogProcessor logProcessor = new CoreIncidentProcessor();
+    private final ObservableList<IncidentReport> incidentReportData= FXCollections.observableArrayList();
 
     // Frontend Interface Components
     private ComboBox<String> threatTypeSelector;
@@ -29,9 +33,17 @@ public class Mainapp extends Application {
     private TextArea incidentDescriptionArea;
 
     // Backend View Components
-    private TableView<IncidentReport> incidentTable;
+    private TableView<IncidentReport> frontendIncidentTable;
     private TableView<IncidentReport> incidentreport;
+     private final AppData  appData=new AppData();
+     String reportedBy;
 
+
+    private void refreshTable() {
+        var list=appData.getIncidentReportbyuser(reportedBy);
+        incidentReportData.setAll(list);
+        frontendIncidentTable.setItems(incidentReportData);
+    }
 
     private void executeReportSubmission() {
         try {
@@ -55,11 +67,14 @@ public class Mainapp extends Application {
                     threatTypeSelector.getValue(),
                     severityMetric,
                     targetSystemField.getText().trim(),
-                    incidentDescriptionArea.getText().trim()
+                    incidentDescriptionArea.getText().trim(),
+                    reportedBy
             );
 
             // Polymorphically process log data arrays
-            logProcessor.processIncident(structuralReport);
+           // logProcessor.processIncident(structuralReport);
+            appData.addIncidentReport(structuralReport);
+            refreshTable();
 
             // Clean form components post successful insertion pipeline
             severityInputField.clear();
@@ -75,6 +90,7 @@ public class Mainapp extends Application {
             errorModal.showAndWait();
         }
     }
+
 
     private VBox buildFrontendPanel() {
         VBox container = new VBox(12);
@@ -134,7 +150,7 @@ public class Mainapp extends Application {
         container.getChildren().add(header);
 
         // Initialize Logging Display Grid View Component (TableView)
-        incidentTable = new TableView<>();
+        frontendIncidentTable = new TableView<>();
        // incidentTable.setItems(IncidentLogProcessor.getMasterIncidentList());
 
         TableColumn<IncidentReport, String> idCol = new TableColumn<>("Log ID");
@@ -161,9 +177,13 @@ public class Mainapp extends Application {
         timeCol.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
         timeCol.setPrefWidth(130);
 
-        incidentTable.getColumns().addAll(idCol, typeCol, sevCol, assetCol, statusCol, timeCol);
-        VBox.setVgrow(incidentTable, Priority.ALWAYS);
-        container.getChildren().add(incidentTable);
+        TableColumn<IncidentReport, String> description = new TableColumn<>("description");
+        timeCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        timeCol.setPrefWidth(130);
+
+        frontendIncidentTable.getColumns().addAll(idCol, typeCol, sevCol, assetCol, statusCol, timeCol, description);
+        VBox.setVgrow(frontendIncidentTable, Priority.ALWAYS);
+        container.getChildren().add(frontendIncidentTable);
 
         // Control Panel Options for Backend Operators
         HBox operatorControls = new HBox(10);
@@ -181,10 +201,10 @@ public class Mainapp extends Application {
 
 
     private void markIncidentResolved() {
-        IncidentReport selectedItem = incidentTable.getSelectionModel().getSelectedItem();
+        IncidentReport selectedItem = frontendIncidentTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             selectedItem.setStatus("RESOLVED");
-            incidentTable.refresh();
+            frontendIncidentTable.refresh();
         } else {
             Alert noticeModal = new Alert(Alert.AlertType.INFORMATION);
             noticeModal.setTitle("Operational Alert");
@@ -207,6 +227,12 @@ public class Mainapp extends Application {
         // Build structural panel regions
         VBox frontendUI = buildFrontendPanel();
         VBox backendUI = buildBackendPanel();
+        reportedBy="Ernest";
+        appData.loadDefaultData();
+        refreshTable();
+
+
+        System.out.println(frontendIncidentTable.getItems().size());
 
         // Bind structures horizontally to present concurrent views
         HBox.setHgrow(frontendUI, Priority.ALWAYS);
