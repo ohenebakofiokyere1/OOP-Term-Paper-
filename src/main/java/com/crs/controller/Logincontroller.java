@@ -1,6 +1,8 @@
 package com.crs.controller;
 
+import com.crs.main.Admin;
 import com.crs.main.Mainapp;
+import com.crs.model.Role;
 import com.crs.model.User;
 import com.crs.services.AppData;
 import com.crs.services.DataStore;
@@ -55,8 +57,13 @@ public class Logincontroller {
         Stage stage = (Stage) emailField.getScene().getWindow();
 
         // Create dashboard and load its UI into the same stage
-        Mainapp dashboard = new Mainapp();
-        dashboard.setUser(user);
-        dashboard.start(stage);
+        if (user.getRole() == Role.SUBSCRIBER){
+            Mainapp dashboard = new Mainapp();
+            dashboard.setUser(user);
+            dashboard.start(stage);}
+        else if(user.getRole() == Role.ADMIN){
+            Admin dashboard = new Admin();
+            dashboard.setUser(user);
+            dashboard.start(stage);}
     }
 }

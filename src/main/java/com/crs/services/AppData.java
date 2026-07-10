@@ -1,5 +1,6 @@
 package com.crs.services;
 
+import com.crs.model.Role;
 import com.crs.model.User;
 
 import java.util.ArrayList;
@@ -37,11 +38,13 @@ public class AppData {
         sub.setEmail("oheneba@gmail.com");
         sub.setName("Yesu");
         sub.setPassword("oheneba1");
+        sub.setRole(Role.SUBSCRIBER);
 
         User admin=new User();
         admin.setEmail("Zobila@gmail.com");
         admin.setName("Zobila");
         admin.setPassword("zobila1");
+        admin.setRole(Role.ADMIN);
 
         userList.add(sub);
         userList.add(admin);

@@ -223,7 +223,7 @@ public class Mainapp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        stage.setTitle("MSc IT | Cybersecurity Incident Reporting System");
+        stage.setTitle("Subscriber | Cybersecurity Incident Reporting System");
 
         // Main structural layout container
         HBox mainContainer = new HBox(20);

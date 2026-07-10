@@ -1,10 +1,10 @@
 package com.crs.model;
-
 public class User {
     private int userid;
     private String name;
     private String email;
     private String password;
+    private Role role;
 
     public int getUserid() {
         return userid;
@@ -36,5 +36,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role=role;
     }
 }

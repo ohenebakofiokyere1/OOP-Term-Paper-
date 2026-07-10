@@ -4,6 +4,7 @@ module com.example.cybersecurityreportsystem {
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
+    requires java.management;
 
     opens com.example.cybersecurityreportsystem to javafx.fxml;
     opens com.crs.controller to javafx.fxml;
