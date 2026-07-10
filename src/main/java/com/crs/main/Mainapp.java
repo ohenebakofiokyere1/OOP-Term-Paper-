@@ -1,5 +1,6 @@
 package com.crs.main;
 
+import com.crs.model.User;
 import com.crs.services.AppData;
 import com.crs.services.CoreIncidentProcessor;
 import com.crs.services.IncidentLogProcessor;
@@ -38,6 +39,11 @@ public class Mainapp extends Application {
      private final AppData  appData=new AppData();
      String reportedBy;
 
+
+    private User currentUser=new User();
+    public void setUser(User user) {
+        currentUser= user;
+    }
 
     private void refreshTable() {
         var list=appData.getIncidentReportbyuser(reportedBy);
@@ -227,7 +233,7 @@ public class Mainapp extends Application {
         // Build structural panel regions
         VBox frontendUI = buildFrontendPanel();
         VBox backendUI = buildBackendPanel();
-        reportedBy="Ernest";
+        reportedBy=currentUser.getName();
         appData.loadDefaultData();
         refreshTable();
 

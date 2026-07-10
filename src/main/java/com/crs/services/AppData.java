@@ -1,5 +1,7 @@
 package com.crs.services;
 
+import com.crs.model.User;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -27,5 +29,25 @@ public class AppData {
     public List<IncidentReport> getIncidentReportbyuser(String reporteduser) {
         List<IncidentReport> list= new ArrayList<>(inReports.values());
         return list.stream().filter(a->a.getReportedBy()==reporteduser).toList();
+    }
+
+    private List<User> userList=new ArrayList<>();
+    public void loadLoginData() {
+        User sub=new User();
+        sub.setEmail("oheneba@gmail.com");
+        sub.setName("Yesu");
+        sub.setPassword("oheneba1");
+
+        User admin=new User();
+        admin.setEmail("Zobila@gmail.com");
+        admin.setName("Zobila");
+        admin.setPassword("zobila1");
+
+        userList.add(sub);
+        userList.add(admin);
+    }
+
+    public List<User> getUserList() {
+        return userList;
     }
 }
