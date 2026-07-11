@@ -1,13 +1,18 @@
 package com.crs.services;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
     /**
      * Demonstrates Encapsulation by protecting the internal states of
      * incident reports via verified accessors and mutators.
+     *
+     * Implements Serializable so that DataManager can persist instances
+     * of this class to the flat .dat file using ObjectOutputStream.
      */
-    public class IncidentReport {
+    public class IncidentReport implements Serializable {
+        private static final long serialVersionUID = 1L;
         private String incidentId;
         private String threatType;
         private int severityLevel;

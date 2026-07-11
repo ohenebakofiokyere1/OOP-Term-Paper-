@@ -1,8 +1,8 @@
 package com.crs.main;
 
 import com.crs.model.User;
-import com.crs.services.AppData;
 import com.crs.services.CoreIncidentProcessor;
+import com.crs.services.DataManager;
 import com.crs.services.IncidentLogProcessor;
 import com.crs.services.IncidentReport;
 import javafx.application.Application;
@@ -19,6 +19,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -36,7 +38,7 @@ public class Mainapp extends Application {
     // Backend View Components
     private TableView<IncidentReport> frontendIncidentTable;
     private TableView<IncidentReport> incidentreport;
-     private final AppData  appData=new AppData();
+     private final DataManager dataManager = new DataManager();
      String reportedBy;
 
 
@@ -46,7 +48,7 @@ public class Mainapp extends Application {
     }
 
     private void refreshTable() {
-        var list=appData.getIncidentReportbyuser(reportedBy);
+        var list = dataManager.getIncidentReportsByUser(reportedBy);
         incidentReportData.setAll(list);
         frontendIncidentTable.setItems(incidentReportData);
     }
@@ -79,7 +81,8 @@ public class Mainapp extends Application {
 
             // Polymorphically process log data arrays
            // logProcessor.processIncident(structuralReport);
-            appData.addIncidentReport(structuralReport);
+            dataManager.addIncidentReport(structuralReport);
+            dataManager.saveToFile();
             refreshTable();
 
             // Clean form components post successful insertion pipeline
@@ -210,6 +213,15 @@ public class Mainapp extends Application {
         IncidentReport selectedItem = frontendIncidentTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             selectedItem.setStatus("RESOLVED");
+            try {
+                dataManager.saveToFile();
+            } catch (IOException e) {
+                Alert saveError = new Alert(Alert.AlertType.ERROR);
+                saveError.setTitle("Data Save Failure");
+                saveError.setHeaderText("Could not save the updated incident status");
+                saveError.setContentText(e.getMessage());
+                saveError.showAndWait();
+            }
             frontendIncidentTable.refresh();
         } else {
             Alert noticeModal = new Alert(Alert.AlertType.INFORMATION);
@@ -234,9 +246,22 @@ public class Mainapp extends Application {
         VBox frontendUI = buildFrontendPanel();
         VBox backendUI = buildBackendPanel();
         reportedBy=currentUser.getName();
-        appData.loadDefaultData();
-        refreshTable();
 
+        try {
+            Map<String, IncidentReport> loaded = dataManager.loadFromFile();
+            if (loaded == null) {
+                // No .dat file yet (first run) - nothing to load, start with an empty store.
+                System.out.println("No existing incidentReports.dat found - starting fresh.");
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            Alert loadError = new Alert(Alert.AlertType.ERROR);
+            loadError.setTitle("Data Load Failure");
+            loadError.setHeaderText("Could not load saved incident reports");
+            loadError.setContentText(e.getMessage());
+            loadError.showAndWait();
+        }
+
+        refreshTable();
 
         System.out.println(frontendIncidentTable.getItems().size());
 
